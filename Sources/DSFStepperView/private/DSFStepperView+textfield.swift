@@ -396,6 +396,34 @@ extension DSFStepperTextField: NSTextFieldDelegate {
 		}
 		return self.valueFormatter?.number(from: self.stringValue) != nil
 	}
+    
+    public func controlTextDidChange(_ notification: Notification) {
+        guard let textView = self.currentEditor() as? NSTextView else { return }
+
+        let allowedCharacters: CharacterSet = {
+            var set = CharacterSet.decimalDigits
+            set.insert(charactersIn: "-+")
+            // If the formatter allows floats, also allow decimal separators
+            if self.valueFormatter?.allowsFloats == true {
+                let decimal = Locale.current.decimalSeparator ?? "."
+                set.insert(charactersIn: decimal)
+            }
+            // Allow grouping separators (e.g. commas in "1,234")
+            if let grouping = Locale.current.groupingSeparator {
+                set.insert(charactersIn: grouping)
+            }
+            return set
+        }()
+
+        let filtered = textView.string.unicodeScalars.filter { allowedCharacters.contains($0) }
+        let filteredString = String(String.UnicodeScalarView(filtered))
+
+        if textView.string != filteredString {
+            let cursorPosition = textView.selectedRange().location - (textView.string.count - filteredString.count)
+            textView.string = filteredString
+            textView.setSelectedRange(NSRange(location: max(cursorPosition, 0), length: 0))
+        }
+    }
 }
 
 private class DSFStepperViewTextFieldCell: NSTextFieldCell {
