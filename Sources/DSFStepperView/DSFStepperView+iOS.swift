@@ -316,7 +316,7 @@ public class DSFStepperView: UIView {
 		self.layer.masksToBounds = true
 
 		self.layer.cornerRadius = 6
-		self.layer.borderWidth = 0.5
+		self.layer.borderWidth = 0
 		self.layer.borderColor = self.borderColor?.cgColor ?? DSFStepperView.borderStrokeDefault.cgColor
 		self.layer.backgroundColor = self.borderBackground?.cgColor ?? DSFStepperView.borderFillDefault.cgColor
 

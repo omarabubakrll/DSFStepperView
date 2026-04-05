@@ -332,6 +332,7 @@ extension DSFStepperTextField {
 		self.isBordered = false
 		self.isBezeled = false
 		self.drawsBackground = false
+        self.focusRingType = .none // I've added this just to remove the ring around the textfield
 
 		// Add the buttons.  Since these are not autolayout managed, we'll need to position them manually in layout()
 		// (The reason for not making these autolayout is
